@@ -6,7 +6,20 @@
 
 `BigInt` nanosecond conversion utility.
 
+This library heavily based on [`ms` v3](https://www.npmjs.com/package/ms). See
+that package for more details.
+
 ## Usage
+
+```ts
+const start = process.hrtime.bigint();
+setTimeout(() => {
+  const end = process.hrtime.bigint();
+  console.log(
+    ns(end - start),
+  );
+}, 1000);
+```
 
 ```ts
 ns("2 days"); // 172800000000000n
@@ -24,10 +37,8 @@ ns("-200"); // -200000000n
 ```
 
 ```ts
-ms(60000000000n); // "1m"
-ms(2n * 60000000000n); // "2m"
-ms(-3n * 60000000000n); // "-3m"
-ms(ms("10 hours")); // "10h"
+ns(60000000000n); // "1m"
+ns(2n * 60000000000n); // "2m"
+ns(-3n * 60000000000n); // "-3m"
+ns(ns("10 hours")); // "10h"
 ```
-
-See [`ms`](https://www.npmjs.com/package/ms) for more details.

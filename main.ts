@@ -264,7 +264,7 @@ function fmtLong(ns: bigint): StringValue {
 /**
  * Format the given bigint as a string.
  *
- * @param ns - milliseconds
+ * @param ns - nanoseconds
  * @param options - Options for the conversion
  * @returns The formatted string
  */
