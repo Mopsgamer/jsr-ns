@@ -1,0 +1,38 @@
+{
+  "name": "@m234/ns",
+  "description": "`BigInt` nanosecond conversion utility.",
+  "version": "0.0.1",
+  "tasks": {
+    "publish": {
+      "command": "deno publish",
+      "dependencies": ["prepare"]
+    },
+    "prepare": "deno check && deno test --coverage && deno lint && deno task badge:tests && deno fmt",
+    "badge:tests": "deno run -A scripts/badge-tests.ts"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["jsr"]
+    }
+  },
+  "publish": {
+    "include": [
+      "README.*",
+      "deno.*",
+      "**/*.ts"
+    ],
+    "exclude": [
+      // https://github.com/jsr-io/jsr/issues/566
+      "**/*.*.ts",
+      "scripts"
+    ]
+  },
+  "license": "MIT",
+  "exports": {
+    ".": "./main.ts"
+  },
+  "imports": {
+    "@std/async": "jsr:@std/async@^1.0.15",
+    "@types/node": "npm:@types/node@^24.10.0"
+  }
+}
