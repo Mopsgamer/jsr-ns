@@ -16,42 +16,42 @@ Deno.test("parseStrict(string)", async (t) => {
     parseStrict("1m");
   });
 
-  await t.step("should preserve ms", () => {
+  await t.step("should preserve ns", () => {
     assertEquals(parseStrict("100"), 100n);
   });
 
-  await t.step("should convert from m to ms", () => {
+  await t.step("should convert from m to ns", () => {
     assertEquals(parseStrict("1m"), 60000n * ms);
   });
 
-  await t.step("should convert from h to ms", () => {
+  await t.step("should convert from h to ns", () => {
     assertEquals(parseStrict("1h"), 3600000n * ms);
   });
 
-  await t.step("should convert d to ms", () => {
+  await t.step("should convert d to ns", () => {
     assertEquals(parseStrict("2d"), 172800000n * ms);
   });
 
-  await t.step("should convert w to ms", () => {
+  await t.step("should convert w to ns", () => {
     assertEquals(parseStrict("3w"), 1814400000n * ms);
   });
 
-  await t.step("should convert s to ms", () => {
+  await t.step("should convert s to ns", () => {
     assertEquals(parseStrict("1s"), 1000n * ms);
   });
 
-  await t.step("should convert ms to ms", () => {
+  await t.step("should convert ms to ns", () => {
     assertEquals(parseStrict("100ms"), 100n * ms);
   });
 
-  await t.step("should convert mo to ms", () => {
+  await t.step("should convert mo to ns", () => {
     assertEquals(parseStrict("1mo"), 2629800000n * ms);
   });
-  await t.step("should convert y to ms", () => {
+  await t.step("should convert y to ns", () => {
     assertEquals(parseStrict("1y"), 31557600000n * ms);
   });
 
-  await t.step("should work with ms", () => {
+  await t.step("should work with ns", () => {
     assertEquals(parseStrict("1.5h"), 5400000n * ms);
   });
 
@@ -59,30 +59,24 @@ Deno.test("parseStrict(string)", async (t) => {
     assertEquals(parseStrict("1   s"), 1000n * ms);
   });
 
-  await t.step("should return NaN if invalid", () => {
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
+  await t.step("should return undefined if invalid", () => {
     assertEquals(parseStrict("☃"), undefined);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
     assertEquals(parseStrict("10-.5"), undefined);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
     assertEquals(parseStrict("foo"), undefined);
   });
 
   await t.step("should be case-insensitive", () => {
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
-    assertEquals(parseStrict("53 YeArS"), 1672552800000);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
-    assertEquals(parseStrict("53 WeEkS"), 32054400000);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
-    assertEquals(parseStrict("53 DaYS"), 4579200000);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
-    assertEquals(parseStrict("53 HoUrs"), 190800000);
-    // @ts-expect-error - we expect the types to fail but JS users can still use this
-    assertEquals(parseStrict("53 MiLliSeCondS"), 53);
+    assertEquals(parseStrict("53 YeArS"), 1672552800000n * ms);
+    assertEquals(parseStrict("53 WeEkS"), 32054400000n * ms);
+    assertEquals(parseStrict("53 DaYS"), 4579200000n * ms);
+    assertEquals(parseStrict("53 HoUrs"), 190800000n * ms);
+    assertEquals(parseStrict("53 MiLliSeCondS"), 53n * ms);
+    assertEquals(parseStrict("53 MicRoSeCondS"), 53n * µs);
+    assertEquals(parseStrict("53 NanOSeCondS"), 53n);
   });
 
   await t.step("should work with numbers starting with .", () => {
-    assertEquals(parseStrict(".5ms"), 0n);
+    assertEquals(parseStrict(".5ms"), ms / 2n);
   });
 
   await t.step("should work with negative integers", () => {
@@ -90,12 +84,12 @@ Deno.test("parseStrict(string)", async (t) => {
   });
 
   await t.step("should work with negative decimals", () => {
-    assertEquals(parseStrict("-1.5h"), -5400000);
-    assertEquals(parseStrict("-10.5h"), -37800000);
+    assertEquals(parseStrict("-1.5h"), -5400000n * ms);
+    assertEquals(parseStrict("-10.5h"), -37800000n * ms);
   });
 
   await t.step('should work with negative decimals starting with "."', () => {
-    assertEquals(parseStrict("-.5h"), -1800000);
+    assertEquals(parseStrict("-.5h"), -1800000n * ms);
   });
 });
 
@@ -106,56 +100,64 @@ Deno.test("parseStrict(long string)", async (t) => {
     parseStrict("53 milliseconds");
   });
 
+  await t.step("should convert nanoseconds to ms", () => {
+    assertEquals(parseStrict("53 nanoseconds"), 53n);
+  });
+
+  await t.step("should convert microseconds to ms", () => {
+    assertEquals(parseStrict("53 microseconds"), 53n * µs);
+  });
+
   await t.step("should convert milliseconds to ms", () => {
-    assertEquals(parseStrict("53 milliseconds"), 53);
+    assertEquals(parseStrict("53 milliseconds"), 53n * ms);
   });
 
   await t.step("should convert msecs to ms", () => {
-    assertEquals(parseStrict("17 msecs"), 17);
+    assertEquals(parseStrict("17 msecs"), 17n * ms);
   });
 
   await t.step("should convert sec to ms", () => {
-    assertEquals(parseStrict("1 sec"), 1000);
+    assertEquals(parseStrict("1 sec"), 1000n * ms);
   });
 
   await t.step("should convert from min to ms", () => {
-    assertEquals(parseStrict("1 min"), 60000);
+    assertEquals(parseStrict("1 min"), 60000n * ms);
   });
 
   await t.step("should convert from hr to ms", () => {
-    assertEquals(parseStrict("1 hr"), 3600000);
+    assertEquals(parseStrict("1 hr"), 3600000n * ms);
   });
 
   await t.step("should convert days to ms", () => {
-    assertEquals(parseStrict("2 days"), 172800000);
+    assertEquals(parseStrict("2 days"), 172800000n * ms);
   });
 
   await t.step("should convert weeks to ms", () => {
-    assertEquals(parseStrict("1 week"), 604800000);
+    assertEquals(parseStrict("1 week"), 604800000n * ms);
   });
 
   await t.step("should convert months to ms", () => {
-    assertEquals(parseStrict("1 month"), 2629800000);
+    assertEquals(parseStrict("1 month"), 2629800000n * ms);
   });
 
   await t.step("should convert years to ms", () => {
-    assertEquals(parseStrict("1 year"), 31557600000);
+    assertEquals(parseStrict("1 year"), 31557600000n * ms);
   });
 
   await t.step("should work with decimals", () => {
-    assertEquals(parseStrict("1.5 hours"), 5400000);
+    assertEquals(parseStrict("1.5 hours"), 5400000n * ms);
   });
 
   await t.step("should work with negative integers", () => {
-    assertEquals(parseStrict("-100 milliseconds"), -100);
+    assertEquals(parseStrict("-100 milliseconds"), -100n * ms);
   });
 
   await t.step("should work with negative decimals", () => {
-    assertEquals(parseStrict("-1.5 hours"), -5400000);
+    assertEquals(parseStrict("-1.5 hours"), -5400000n * ms);
   });
 
   await t.step('should work with negative decimals starting with "."', () => {
-    assertEquals(parseStrict("-.5 hr"), -1800000);
+    assertEquals(parseStrict("-.5 hr"), -1800000n * ms);
   });
 });
 
@@ -164,7 +166,6 @@ Deno.test("parseStrict(long string)", async (t) => {
 Deno.test("parseStrict(invalid inputs)", async (t) => {
   await t.step('should throw an error, when parseStrict("")', () => {
     assertThrows(() => {
-      // @ts-expect-error - We expect this to throw.
       parseStrict("");
     });
   });
@@ -173,7 +174,6 @@ Deno.test("parseStrict(invalid inputs)", async (t) => {
     'should throw an error, when parseStrict("...>100 length string...")',
     () => {
       assertThrows(() => {
-        // @ts-expect-error - We expect this to throw.
         parseStrict("▲".repeat(101));
       });
     },

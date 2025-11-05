@@ -35,7 +35,8 @@ type UnitAnyCase = Capitalize<Unit> | Uppercase<Unit> | Unit;
 export type StringValue =
   | `${bigint}`
   | `${bigint}${UnitAnyCase}`
-  | `${bigint} ${UnitAnyCase}`;
+  | `${bigint} ${UnitAnyCase}`
+  | string & {};
 
 interface Options {
   /**
@@ -88,7 +89,7 @@ export function parse(str: string): bigint | undefined {
     );
   }
   const match =
-    /^(?<value>-?\d*\.?\d+) *(?<unit>nanoseconds?|nsecs?|ns|microseconds?|µsecs?|µs|milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|months?|mo|years?|yrs?|y)?$/i
+    /^(?<value>-?\d+|-?\d*\.?(?<frac>\d+)) *(?<unit>nanoseconds?|nsecs?|ns|microseconds?|µsecs?|µs|milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|months?|mo|years?|yrs?|y)?$/i
       .exec(
         str,
       );
@@ -99,12 +100,14 @@ export function parse(str: string): bigint | undefined {
 
   // Named capture groups need to be manually typed today.
   // https://github.com/microsoft/TypeScript/issues/32098
-  const { value, unit = "ns" } = match.groups as {
+  const { value, frac = "", unit = "ns" } = match.groups as {
+    frac: string | undefined;
     value: string;
     unit: string | undefined;
   };
 
-  const n = BigInt(value);
+  const fraclen = BigInt("1" + ("0".repeat(frac.length)));
+  const n = BigInt(value.replace(".", ""));
 
   const matchUnit = unit.toLowerCase() as Lowercase<Unit>;
 
@@ -114,55 +117,55 @@ export function parse(str: string): bigint | undefined {
     case "yrs":
     case "yr":
     case "y":
-      return n * y;
+      return n * y / fraclen;
     case "months":
     case "month":
     case "mo":
-      return n * mo;
+      return n * mo / fraclen;
     case "weeks":
     case "week":
     case "w":
-      return n * w;
+      return n * w / fraclen;
     case "days":
     case "day":
     case "d":
-      return n * d;
+      return n * d / fraclen;
     case "hours":
     case "hour":
     case "hrs":
     case "hr":
     case "h":
-      return n * h;
+      return n * h / fraclen;
     case "minutes":
     case "minute":
     case "mins":
     case "min":
     case "m":
-      return n * m;
+      return n * m / fraclen;
     case "seconds":
     case "second":
     case "secs":
     case "sec":
     case "s":
-      return n * s;
+      return n * s / fraclen;
     case "milliseconds":
     case "millisecond":
     case "msecs":
     case "msec":
     case "ms":
-      return n * ms;
+      return n * ms / fraclen;
     case "microseconds":
     case "microsecond":
     case "µsecs":
     case "µsec":
     case "µs":
-      return n * µs;
+      return n * µs / fraclen;
     case "nanoseconds":
     case "nanosecond":
     case "nsecs":
     case "nsec":
     case "ns":
-      return n;
+      return n / fraclen;
     default:
       matchUnit satisfies never;
       throw new Error(
