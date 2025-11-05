@@ -2,10 +2,9 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/assert@*": "1.0.14",
-    "jsr:@std/async@^1.0.15": "1.0.15",
     "jsr:@std/fmt@*": "1.0.8",
     "jsr:@std/internal@^1.0.10": "1.0.10",
-    "npm:@types/node@^24.10.0": "24.10.0",
+    "npm:@types/node@*": "24.2.0",
     "npm:badge-maker@*": "5.0.2",
     "npm:ora@*": "8.2.0"
   },
@@ -16,9 +15,6 @@
         "jsr:@std/internal"
       ]
     },
-    "@std/async@1.0.15": {
-      "integrity": "55d1d9d04f99403fe5730ab16bdcc3c47f658a6bf054cafb38a50f046238116e"
-    },
     "@std/fmt@1.0.8": {
       "integrity": "71e1fc498787e4434d213647a6e43e794af4fd393ef8f52062246e06f7e372b7"
     },
@@ -27,8 +23,8 @@
     }
   },
   "npm": {
-    "@types/node@24.10.0": {
-      "integrity": "sha512-qzQZRBqkFsYyaSWXuEHc2WR9c0a0CXwiE5FWUvn7ZM+vdy1uZLfCunD38UzhuB7YN/J11ndbDBcTmOdxJo9Q7A==",
+    "@types/node@24.2.0": {
+      "integrity": "sha512-3xyG3pMCq3oYCNg7/ZP+E1ooTaGB4cG8JWRsqqOYQdbWNY4zbaV0Ennrd7stjiJEFZCaybcIgpTjJWHRfBSIDw==",
       "dependencies": [
         "undici-types"
       ]
@@ -160,14 +156,8 @@
         "ansi-regex"
       ]
     },
-    "undici-types@7.16.0": {
-      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="
+    "undici-types@7.10.0": {
+      "integrity": "sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag=="
     }
-  },
-  "workspace": {
-    "dependencies": [
-      "jsr:@std/async@^1.0.15",
-      "npm:@types/node@^24.10.0"
-    ]
   }
 }

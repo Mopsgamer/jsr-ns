@@ -6,7 +6,7 @@
 
 `BigInt` nanosecond conversion utility.
 
-This library heavily based on [`ms` v3](https://www.npmjs.com/package/ms). See
+This library is heavily based on [`ms` v3](https://www.npmjs.com/package/ms). See
 that package for more details.
 
 ## Usage

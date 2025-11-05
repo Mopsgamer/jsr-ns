@@ -30,9 +30,5 @@
   "license": "MIT",
   "exports": {
     ".": "./main.ts"
-  },
-  "imports": {
-    "@std/async": "jsr:@std/async@^1.0.15",
-    "@types/node": "npm:@types/node@^24.10.0"
   }
 }
