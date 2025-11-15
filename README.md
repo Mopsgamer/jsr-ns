@@ -6,13 +6,13 @@
 
 `BigInt` nanosecond conversion utility.
 
-This library is based on [`ms` v4](https://www.npmjs.com/package/ms).
-For more details, see that package.
+This library is based on [`ms` v4](https://www.npmjs.com/package/ms). For more
+details, see that package.
 
 ## Differences from `ms`
 
 - This library uses `BigInt` and nanoseconds instead of milliseconds.
-- The `StringValue` argument is more friendlier.
+- The `StringValue` argument is more friendly.
 
 ## Usage
 

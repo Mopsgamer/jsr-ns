@@ -32,6 +32,9 @@ type Unit =
 
 type UnitAnyCase = Capitalize<Unit> | Uppercase<Unit> | Unit;
 
+/**
+ * A typesafe string value representing a duration.
+ */
 export type StringValue =
   | `${bigint}`
   | `${bigint}${UnitAnyCase}`
@@ -166,6 +169,7 @@ export function parse(str: string): bigint | undefined {
     case "nsec":
     case "ns":
       return n / fraclen;
+    // deno-coverage-ignore-start
     default:
       matchUnit satisfies never;
       throw new Error(
@@ -173,6 +177,7 @@ export function parse(str: string): bigint | undefined {
           JSON.stringify(str)
         }`,
       );
+      // deno-coverage-ignore-stop
   }
 }
 

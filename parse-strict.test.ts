@@ -118,10 +118,12 @@ Deno.test("parseStrict(long string)", async (t) => {
 
   await t.step("should convert sec to ms", () => {
     assertEquals(parseStrict("1 sec"), 1000n * ms);
+    assertEquals(parseStrict("1 seconds"), 1000n * ms);
   });
 
   await t.step("should convert from min to ms", () => {
     assertEquals(parseStrict("1 min"), 60000n * ms);
+    assertEquals(parseStrict("1 minutes"), 60000n * ms);
   });
 
   await t.step("should convert from hr to ms", () => {
@@ -138,6 +140,7 @@ Deno.test("parseStrict(long string)", async (t) => {
 
   await t.step("should convert months to ms", () => {
     assertEquals(parseStrict("1 month"), 2629800000n * ms);
+    assertEquals(parseStrict("1 months"), 2629800000n * ms);
   });
 
   await t.step("should convert years to ms", () => {
