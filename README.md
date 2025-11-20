@@ -4,7 +4,8 @@
 ![Tests](https://raw.githubusercontent.com/Mopsgamer/jsr-ns/refs/heads/main/assets/badge-tests.svg)
 ![Tests coverage](https://raw.githubusercontent.com/Mopsgamer/jsr-ns/refs/heads/main/assets/badge-cov.svg)
 
-`BigInt` nanosecond conversion utility.
+Use this package to easily convert various time formats to nanoseconds (BigInt)
+or milliseconds (Number).
 
 This library is based on [`ms` v4](https://www.npmjs.com/package/ms). For more
 details, see that package.
@@ -12,6 +13,8 @@ details, see that package.
 ## Differences from `ms`
 
 - This library uses `BigInt` and nanoseconds instead of milliseconds.
+- `ns(StringValue | bigint): bigint | string` is available.
+- `ms(StringValue | number): number | string` is available.
 - The `StringValue` argument is more friendly.
 
 ## Usage

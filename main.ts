@@ -1,12 +1,14 @@
-const µs = 1000n;
-const ms = µs * 1000n;
-const s = ms * 1000n;
-const m = s * 60n;
-const h = m * 60n;
-const d = h * 24n;
-const w = d * 7n;
-const y = d * 365n + h * 6n;
-const mo = y / 12n;
+namespace unit {
+  export const µs = 1000n;
+  export const ms = µs * 1000n;
+  export const s = ms * 1000n;
+  export const m = s * 60n;
+  export const h = m * 60n;
+  export const d = h * 24n;
+  export const w = d * 7n;
+  export const y = d * 365n + h * 6n;
+  export const mo = y / 12n;
+}
 
 type Years = "years" | "year" | "yrs" | "yr" | "y";
 type Months = "months" | "month" | "mo";
@@ -77,6 +79,34 @@ export function ns(
 }
 
 /**
+ * Parse or format the given value.
+ *
+ * @param value - The string or number to convert
+ * @param options - Options for the conversion
+ * @throws Error if `value` is not a non-empty string or a number
+ */
+export function ms(value: StringValue, options?: Options): number;
+export function ms(value: number, options?: Options): string;
+export function ms(
+  value: StringValue | number,
+  options?: Options,
+): number | string {
+  if (typeof value === "string") {
+    const parsed = parse(value);
+    if (parsed !== undefined) {
+      return Number(parsed / unit.ms);
+    }
+  } else if (typeof value === "number") {
+    return format(BigInt(value) * unit.ms, options);
+  }
+  throw new Error(
+    `Value provided to ms() must be a string or number. value=${
+      JSON.stringify(value)
+    }`,
+  );
+}
+
+/**
  * Parse the given string and return nanoseconds.
  *
  * @param str - A string to parse to nanoseconds
@@ -103,7 +133,7 @@ export function parse(str: string): bigint | undefined {
 
   // Named capture groups need to be manually typed today.
   // https://github.com/microsoft/TypeScript/issues/32098
-  const { value, frac = "", unit = "ns" } = match.groups as {
+  const { value, frac = "", unit: mod = "ns" } = match.groups as {
     frac: string | undefined;
     value: string;
     unit: string | undefined;
@@ -112,7 +142,7 @@ export function parse(str: string): bigint | undefined {
   const fraclen = 10n ** BigInt(frac.length);
   const n = BigInt(value.replace(".", ""));
 
-  const matchUnit = unit.toLowerCase() as Lowercase<Unit>;
+  const matchUnit = mod.toLowerCase() as Lowercase<Unit>;
 
   switch (matchUnit) {
     case "years":
@@ -120,49 +150,49 @@ export function parse(str: string): bigint | undefined {
     case "yrs":
     case "yr":
     case "y":
-      return n * y / fraclen;
+      return n * unit.y / fraclen;
     case "months":
     case "month":
     case "mo":
-      return n * mo / fraclen;
+      return n * unit.mo / fraclen;
     case "weeks":
     case "week":
     case "w":
-      return n * w / fraclen;
+      return n * unit.w / fraclen;
     case "days":
     case "day":
     case "d":
-      return n * d / fraclen;
+      return n * unit.d / fraclen;
     case "hours":
     case "hour":
     case "hrs":
     case "hr":
     case "h":
-      return n * h / fraclen;
+      return n * unit.h / fraclen;
     case "minutes":
     case "minute":
     case "mins":
     case "min":
     case "m":
-      return n * m / fraclen;
+      return n * unit.m / fraclen;
     case "seconds":
     case "second":
     case "secs":
     case "sec":
     case "s":
-      return n * s / fraclen;
+      return n * unit.s / fraclen;
     case "milliseconds":
     case "millisecond":
     case "msecs":
     case "msec":
     case "ms":
-      return n * ms / fraclen;
+      return n * unit.ms / fraclen;
     case "microseconds":
     case "microsecond":
     case "µsecs":
     case "µsec":
     case "µs":
-      return n * µs / fraclen;
+      return n * unit.µs / fraclen;
     case "nanoseconds":
     case "nanosecond":
     case "nsecs":
@@ -201,32 +231,32 @@ function divRound(a: bigint, b: bigint): bigint {
  */
 function fmtShort(ns: bigint): StringValue {
   const msAbs = ns < 0n ? -ns : ns;
-  if (msAbs >= y) {
-    return `${divRound(ns, y)}y`;
+  if (msAbs >= unit.y) {
+    return `${divRound(ns, unit.y)}y`;
   }
-  if (msAbs >= mo) {
-    return `${divRound(ns, mo)}mo`;
+  if (msAbs >= unit.mo) {
+    return `${divRound(ns, unit.mo)}mo`;
   }
-  if (msAbs >= w) {
-    return `${divRound(ns, w)}w`;
+  if (msAbs >= unit.w) {
+    return `${divRound(ns, unit.w)}w`;
   }
-  if (msAbs >= d) {
-    return `${divRound(ns, d)}d`;
+  if (msAbs >= unit.d) {
+    return `${divRound(ns, unit.d)}d`;
   }
-  if (msAbs >= h) {
-    return `${divRound(ns, h)}h`;
+  if (msAbs >= unit.h) {
+    return `${divRound(ns, unit.h)}h`;
   }
-  if (msAbs >= m) {
-    return `${divRound(ns, m)}m`;
+  if (msAbs >= unit.m) {
+    return `${divRound(ns, unit.m)}m`;
   }
-  if (msAbs >= s) {
-    return `${divRound(ns, s)}s`;
+  if (msAbs >= unit.s) {
+    return `${divRound(ns, unit.s)}s`;
   }
-  if (msAbs >= ms) {
-    return `${divRound(ns, ms)}ms`;
+  if (msAbs >= unit.ms) {
+    return `${divRound(ns, unit.ms)}ms`;
   }
-  if (msAbs >= µs) {
-    return `${divRound(ns, µs)}µs`;
+  if (msAbs >= unit.µs) {
+    return `${divRound(ns, unit.µs)}µs`;
   }
   return `${ns}ns`;
 }
@@ -236,32 +266,32 @@ function fmtShort(ns: bigint): StringValue {
  */
 function fmtLong(ns: bigint): StringValue {
   const msAbs = ns < 0n ? -ns : ns;
-  if (msAbs >= y) {
-    return plural(ns, msAbs, y, "year");
+  if (msAbs >= unit.y) {
+    return plural(ns, msAbs, unit.y, "year");
   }
-  if (msAbs >= mo) {
-    return plural(ns, msAbs, mo, "month");
+  if (msAbs >= unit.mo) {
+    return plural(ns, msAbs, unit.mo, "month");
   }
-  if (msAbs >= w) {
-    return plural(ns, msAbs, w, "week");
+  if (msAbs >= unit.w) {
+    return plural(ns, msAbs, unit.w, "week");
   }
-  if (msAbs >= d) {
-    return plural(ns, msAbs, d, "day");
+  if (msAbs >= unit.d) {
+    return plural(ns, msAbs, unit.d, "day");
   }
-  if (msAbs >= h) {
-    return plural(ns, msAbs, h, "hour");
+  if (msAbs >= unit.h) {
+    return plural(ns, msAbs, unit.h, "hour");
   }
-  if (msAbs >= m) {
-    return plural(ns, msAbs, m, "minute");
+  if (msAbs >= unit.m) {
+    return plural(ns, msAbs, unit.m, "minute");
   }
-  if (msAbs >= s) {
-    return plural(ns, msAbs, s, "second");
+  if (msAbs >= unit.s) {
+    return plural(ns, msAbs, unit.s, "second");
   }
-  if (msAbs >= ms) {
-    return `${ns / ms} ms`;
+  if (msAbs >= unit.ms) {
+    return `${ns / unit.ms} ms`;
   }
-  if (msAbs >= µs) {
-    return `${ns / µs} µs`;
+  if (msAbs >= unit.µs) {
+    return `${ns / unit.µs} µs`;
   }
   return `${ns} ns`;
 }
