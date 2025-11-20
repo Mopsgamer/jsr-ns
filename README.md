@@ -65,3 +65,31 @@ ns(-3n * 60000000000n, { long: true });    // "-3 minutes"
 ns(ns('10 hours'), { long: true });        // "10 hours"
 ```
 <!-- deno-fmt-ignore-end -->
+
+### Input formats (units)
+
+<!-- deno-fmt-ignore-start -->
+```ts
+type Years = "years" | "year" | "yrs" | "yr" | "y";
+type Months = "months" | "month" | "mo";
+type Weeks = "weeks" | "week" | "w";
+type Days = "days" | "day" | "d";
+type Hours = "hours" | "hour" | "hrs" | "hr" | "h";
+type Minutes = "minutes" | "minute" | "mins" | "min" | "m";
+type Seconds = "seconds" | "second" | "secs" | "sec" | "s";
+type Milliseconds = "milliseconds" | "millisecond" | "msecs" | "msec" | "ms";
+type Microseconds = "microseconds" | "microsecond" | "µsecs" | "µsec" | "µs";
+type Nanoseconds = "nanoseconds" | "nanosecond" | "nsecs" | "nsec" | "ns";
+type Unit =
+  | Years
+  | Months
+  | Weeks
+  | Days
+  | Hours
+  | Minutes
+  | Seconds
+  | Milliseconds
+  | Microseconds
+  | Nanoseconds;
+```
+<!-- deno-fmt-ignore-end -->
