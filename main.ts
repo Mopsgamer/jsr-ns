@@ -109,7 +109,7 @@ export function parse(str: string): bigint | undefined {
     unit: string | undefined;
   };
 
-  const fraclen = BigInt("1" + ("0".repeat(frac.length)));
+  const fraclen = 10n ** BigInt(frac.length);
   const n = BigInt(value.replace(".", ""));
 
   const matchUnit = unit.toLowerCase() as Lowercase<Unit>;
